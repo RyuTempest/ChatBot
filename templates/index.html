@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHATBOT - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <span>CHATBOT</span>
+            </div>
+            <div class="header-actions">
+                <div class="status-indicator" id="botStatus">
+                    <div class="status-dot"></div>
+                    <span>Connecting...</span>
+                </div>
+                <button class="nav-item" onclick="showSettings()">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Navigation</div>
+                <div class="nav-item active" onclick="showChat()">
+                    <i class="fas fa-comments"></i>
+                    Chat
+                </div>
+                <div class="nav-item" onclick="showDashboard()">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </div>
+                <div class="nav-item" onclick="showHistory()">
+                    <i class="fas fa-history"></i>
+                    History
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Quick Actions</div>
+                <div class="nav-item" onclick="clearHistory()">
+                    <i class="fas fa-trash"></i>
+                    Clear History
+                </div>
+                <div class="nav-item" onclick="exportChat()">
+                    <i class="fas fa-download"></i>
+                    Export Chat
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-title">Bot Info</div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalMessages">0</div>
+                    <div class="stat-label">Total Messages</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="activeUsers">0</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Chat Interface -->
+            <div id="chatView" class="content-view">
+                <div class="content-header">
+                    <h1 class="content-title">CHATBOT</h1>
+                    <p class="content-subtitle">Chat with CHATBOT powered by OpenAI</p>
+                </div>
+
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <!-- Welcome message -->
+                        <div class="message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    Hello! I'm CHATBOT. How can I help you today? Feel free to ask me anything!
+                                </div>
+                                <div class="message-time">{{ current_time }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-container">
+                        <div class="chat-input-wrapper">
+                            <textarea 
+                                class="chat-input" 
+                                id="chatInput" 
+                                placeholder="Message CHATBOT..."
+                                rows="3"
+                                maxlength="2000"
+                            ></textarea>
+                            <button class="send-button" id="sendButton" onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="content-view" style="display: none;">
+                <div class="content-header">
+                    <h1 class="content-title">Dashboard</h1>
+                    <p class="content-subtitle">Bot statistics and system information</p>
+                </div>
+
+                <div class="settings-panel">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number" id="dashboardMessages">0</div>
+                            <div class="stat-label">Messages Today</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="dashboardUsers">0</div>
+                            <div class="stat-label">Unique Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="dashboardUptime">0h</div>
+                            <div class="stat-label">Uptime</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number" id="dashboardResponseTime">0ms</div>
+                            <div class="stat-label">Avg Response</div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>System Status</h3>
+                        <div class="status-indicator status-online">
+                            <div class="status-dot"></div>
+                            <span>Discord API: Connected</span>
+                        </div>
+                        <div class="status-indicator status-online">
+                            <div class="status-dot"></div>
+                            <span>OpenAI API: Connected</span>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Recent Activity</h3>
+                        <div id="recentActivity">
+                            <p>Loading recent activity...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History View -->
+            <div id="historyView" class="content-view" style="display: none;">
+                <div class="content-header">
+                    <h1 class="content-title">Chat History</h1>
+                    <p class="content-subtitle">View and manage your conversation history</p>
+                </div>
+
+                <div class="settings-panel">
+                    <div class="setting-group">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>Conversation History</h3>
+                            <button class="send-button" onclick="clearAllHistory()">
+                                <i class="fas fa-trash"></i>
+                                Clear All
+                            </button>
+                        </div>
+                        <div id="historyList">
+                            <p>Loading conversation history...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div id="settingsView" class="content-view" style="display: none;">
+                <div class="content-header">
+                    <h1 class="content-title">Settings</h1>
+                    <p class="content-subtitle">Configure bot preferences and API settings</p>
+                </div>
+
+                <div class="settings-panel">
+                    <div class="setting-group">
+                        <h3>Bot Configuration</h3>
+                        <label class="setting-label">Bot Name</label>
+                        <input type="text" class="setting-input" id="botName" value="CHATBOT" placeholder="Enter bot name">
+                        
+                        <label class="setting-label">Default Response Style</label>
+                        <select class="setting-select" id="responseStyle">
+                            <option value="friendly">Friendly</option>
+                            <option value="professional">Professional</option>
+                            <option value="casual">Casual</option>
+                            <option value="creative">Creative</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>OpenAI Settings</h3>
+                        <label class="setting-label">Model Selection</label>
+                        <select class="setting-select" id="openaiModel">
+                            <option value="gpt-4">GPT-4 (Recommended)</option>
+                            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                            <option value="gpt-3.5-turbo-16k">GPT-3.5 Turbo 16K</option>
+                        </select>
+                        
+                        <label class="setting-label">Response Length</label>
+                        <select class="setting-select" id="responseLength">
+                            <option value="short">Short (Concise)</option>
+                            <option value="medium" selected>Medium (Balanced)</option>
+                            <option value="long">Long (Detailed)</option>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <h3>Chat Preferences</h3>
+                        <div class="setting-toggle" onclick="toggleSetting('memoryEnabled')">
+                            <span>Enable Conversation Memory</span>
+                            <div class="toggle-switch active" id="memoryToggle">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-toggle" onclick="toggleSetting('typingIndicator')">
+                            <span>Show Typing Indicator</span>
+                            <div class="toggle-switch active" id="typingToggle">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-toggle" onclick="toggleSetting('autoScroll')">
+                            <span>Auto-scroll to Latest</span>
+                            <div class="toggle-switch active" id="scrollToggle">
+                                <div class="toggle-slider"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="setting-group">
+                        <button class="send-button" onclick="saveSettings()">
+                            <i class="fas fa-save"></i>
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
