@@ -1,20 +1,17 @@
-# 🤖 Discord AI Chatbot
+# 🤖 Discord AI Chatbot with Web Interface
 
-A powerful Discord bot powered by OpenAI's GPT-4 (or GPT-3.5) that provides intelligent chat responses using slash commands.
+A feature-rich Discord bot powered by OpenAI's GPT models (or Gemini) that provides intelligent chat responses. It also includes a modern web interface for interacting with the bot outside of Discord.
 
 ## ✨ Features
 
-- **AI-Powered Chat**: Intelligent responses using OpenAI's latest language models
-- **Slash Commands**: Modern Discord slash command interface
-- **Web Interface**: Beautiful, responsive web UI for desktop and mobile
-- **Conversation Memory**: Remembers conversation context for each user
-- **Smart Message Splitting**: Automatically splits long responses to fit Discord's limits
-- **Real-time Chat**: Live chat interface with typing indicators and smooth animations
-- **Dashboard**: Comprehensive statistics and system monitoring
-- **Settings Management**: Customizable bot preferences and API configurations
-- **Error Handling**: Comprehensive error handling and user-friendly error messages
-- **Logging**: Detailed logging for debugging and monitoring
-- **Production Ready**: Clean, modular code structure with proper error handling
+- **AI-Powered Chat**: Supports OpenAI and Gemini AI providers for intelligent, context-aware responses
+- **Discord Slash Commands**: Modern and intuitive command interface for Discord users
+- **Web Interface**: A responsive web UI for interacting with the chatbot
+- **Conversation Memory**: Remembers user-specific conversation history for better context
+- **Customizable AI Models**: Choose from a variety of OpenAI and Gemini models
+- **Settings Management**: Easily configure bot preferences and API settings
+- **Error Handling**: Comprehensive error handling with detailed logs
+- **Extensible Design**: Modular structure for adding new features or AI providers
 
 ## 🚀 Quick Start
 
@@ -22,187 +19,131 @@ A powerful Discord bot powered by OpenAI's GPT-4 (or GPT-3.5) that provides inte
 
 - Python 3.8 or higher
 - Discord Bot Token
-- OpenAI API Key
-- Discord Server (where you have admin permissions)
+- OpenAI or Gemini API Key
+- Admin access to a Discord server
 
-### 1. Clone or Download
+### 1. Clone the Repository
 
-Download this project to your local machine.
+Download the project to your local machine:
+
+```bash
+git clone https://github.com/your-username/discord-ai-chatbot.git
+cd discord-ai-chatbot
+```
 
 ### 2. Install Dependencies
+
+Install the required Python packages:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Environment Setup
+### 3. Set Up Environment Variables
 
-1. Copy `env.example` to `.env`:
-   ```bash
-   cp env.example .env
-   ```
+1. Copy the example environment file:
 
-2. Edit `.env` and add your tokens:
-   ```env
-   DISCORD_TOKEN=your_discord_bot_token_here
-   OPENAI_API_KEY=your_openai_api_key_here
-   OPENAI_MODEL=gpt-4
-   ```
+```bash
+cp .env.example .env
+```
+
+2. Edit `.env` and add your credentials:
+
+```env
+DISCORD_TOKEN=your_discord_bot_token
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-4
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-1.5
+```
 
 ### 4. Run the Bot
 
-**Discord Bot:**
+**Discord Bot**:
 ```bash
-python main.py
+python bot.py
 ```
 
-**Web Interface:**
+**Web Interface**:
 ```bash
-python web_server.py
+python app.py
 ```
 
 The web interface will be available at: http://localhost:5000
+
+## 🏗️ Project Structure
+
+```
+discord-ai-chatbot/
+├── bot.py              # Discord bot main file
+├── app.py              # Web interface application
+├── requirements.txt    # Python dependencies
+├── .env.example       # Example environment variables
+├── static/            # Web assets (CSS, JS)
+├── templates/         # HTML templates
+├── logs/             # Log files
+└── README.md         # This file
+```
+
+## 📚 Commands
+
+### Discord Slash Commands
+
+- `/chat [message]`: Chat with the AI assistant
+  - Example: `/chat What's the weather like today?`
+- `/clear`: Clear your conversation history with the bot
+- `/help`: Display help information and available commands
 
 ## 🔧 Setup Instructions
 
 ### Creating a Discord Bot
 
-1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
-2. Click "New Application" and give it a name
-3. Go to the "Bot" section
-4. Click "Add Bot"
-5. Copy the bot token (you'll need this for the `.env` file)
-6. Under "Privileged Gateway Intents", enable:
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications)
+2. Create a new application and add a bot
+3. Copy the bot token and add it to your `.env` file
+4. Enable the following intents under "Privileged Gateway Intents":
    - Message Content Intent
    - Server Members Intent
-7. Save changes
+5. Save changes
 
-### Bot Permissions
-
-Your bot needs these permissions:
-- Send Messages
-- Use Slash Commands
-- Read Message History
-- Embed Links
-- Attach Files
-
-### Adding Bot to Your Server
+### Adding the Bot to Your Server
 
 1. Go to the "OAuth2" → "URL Generator" section
-2. Select "bot" under scopes
-3. Select the permissions listed above
-4. Copy the generated URL and open it in your browser
-5. Select your server and authorize the bot
+2. Select "bot" under scopes and assign the following permissions:
+   - Send Messages
+   - Use Slash Commands
+   - Read Message History
+   - Embed Links
+   - Attach Files
+3. Copy the generated URL, open it in your browser, and invite the bot to your server
 
-### Getting OpenAI API Key
+### Getting OpenAI or Gemini API Keys
 
-1. Go to [OpenAI Platform](https://platform.openai.com/)
-2. Sign up or log in
-3. Go to "API Keys" section
-4. Create a new API key
-5. Copy the key (you'll need this for the `.env` file)
-
-## 📚 Commands
-
-### `/chat [message]`
-Chat with the AI assistant. The bot will respond with intelligent, contextual responses.
-
-**Example:**
-```
-/chat What's the weather like today?
-```
-
-### `/clear`
-Clear your conversation history with the AI. Useful for starting fresh conversations.
-
-### `/help`
-Display help information and available commands.
-
-## 🏗️ Project Structure
-
-```
-chatbot/
-├── main.py              # Main bot entry point
-├── config.py            # Configuration and environment variables
-├── cogs/
-│   ├── __init__.py      # Package initialization
-│   └── chat.py          # Chat functionality cog
-├── web_server.py        # Flask web server for web interface
-├── static/              # Web interface assets
-│   ├── css/
-│   │   └── style.css    # Modern CSS styles
-│   └── js/
-│       └── app.js       # Interactive JavaScript
-├── templates/           # HTML templates
-│   └── index.html       # Main web interface
-├── requirements.txt      # Python dependencies
-├── env.example          # Environment variables template
-├── start.bat            # Windows script to start Discord bot
-├── start_web.bat        # Windows script to start web interface
-├── README.md            # This file
-└── bot.log              # Log file (created when bot runs)
-```
+- **OpenAI**: Visit the [OpenAI Platform](https://platform.openai.com/api-keys) to generate an API key
+- **Gemini**: Refer to the [Gemini documentation](https://ai.google.dev/gemini-api/docs/api-key) for API key setup
 
 ## 🔍 Troubleshooting
 
 ### Common Issues
 
-**Bot doesn't respond to commands:**
-- Check if the bot has the correct permissions
-- Ensure slash commands are synced (check bot logs)
-- Verify the bot is online and connected
+- **Bot doesn't respond**:
+  - Ensure the bot has the correct permissions
+  - Verify the bot is online and connected to Discord
+  - Check the logs in `bot.log`
 
-**OpenAI API errors:**
-- Check your API key is correct
-- Ensure you have sufficient API credits
-- Check if the API key has the correct permissions
+- **API errors**:
+  - Ensure your API key is valid and has sufficient credits
+  - Verify the AI model name in the `.env` file
 
-**Environment variable errors:**
-- Make sure `.env` file exists and is in the project root
-- Verify all required variables are set
-- Check for typos in variable names
+- **Environment variable errors**:
+  - Ensure the `.env` file exists and is correctly configured
 
 ### Logs
 
-The bot creates detailed logs in `bot.log`. Check this file for:
-- Bot startup information
-- Command execution logs
-- Error details
-- API response information
-
-## 🚀 Deployment
-
-### Local Development
-
-**Discord Bot:**
-```bash
-python main.py
-```
-
-**Web Interface:**
-```bash
-python web_server.py
-```
-
-### Production Deployment
-For production deployment, consider:
-- Using a process manager like PM2 or systemd
-- Setting up proper logging rotation
-- Using environment variables instead of `.env` files
-- Running behind a reverse proxy if needed
-- Using a production WSGI server like Gunicorn for the web interface
-
-### Docker (Optional)
-```dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-COPY . .
-CMD ["python", "main.py"]
-```
+Detailed logs are saved in `bot.log`. Use these logs to debug issues such as:
+- Bot startup errors
+- API response issues
+- Command execution details
 
 ## 📝 Configuration Options
 
@@ -213,16 +154,33 @@ CMD ["python", "main.py"]
 | `DISCORD_TOKEN` | Discord bot token | - | Yes |
 | `OPENAI_API_KEY` | OpenAI API key | - | Yes |
 | `OPENAI_MODEL` | OpenAI model to use | `gpt-4` | No |
+| `GEMINI_API_KEY` | Gemini API key | - | No |
+| `GEMINI_MODEL` | Gemini model to use | `gemini-1.5` | No |
 
-### Supported OpenAI Models
-- `gpt-4` (recommended)
-- `gpt-4-turbo`
-- `gpt-3.5-turbo`
-- `gpt-3.5-turbo-16k`
+## 🚀 Deployment
+
+### Local Development
+
+Run the bot and web interface locally:
+
+```bash
+# Terminal 1 - Discord Bot
+python bot.py
+
+# Terminal 2 - Web Interface
+python app.py
+```
+
+### Production Deployment
+
+For production, consider:
+- Using a process manager like `systemd` or `PM2`
+- Running the web server with a production WSGI server like Gunicorn
+- Setting up a reverse proxy (e.g., Nginx) for the web interface
 
 ## 🤝 Contributing
 
-Feel free to contribute to this project by:
+Contributions are welcome! You can help by:
 - Reporting bugs
 - Suggesting new features
 - Submitting pull requests
@@ -231,22 +189,3 @@ Feel free to contribute to this project by:
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
-
-## 🆘 Support
-
-If you encounter any issues:
-1. Check the troubleshooting section above
-2. Review the bot logs in `bot.log`
-3. Ensure all dependencies are installed correctly
-4. Verify your environment variables are set properly
-
-## 🔄 Updates
-
-To update the bot:
-1. Download the latest version
-2. Update your `.env` file if needed
-3. Restart the bot
-
----
-
-**Happy chatting! 🤖💬**
